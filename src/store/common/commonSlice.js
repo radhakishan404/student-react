@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { api_student_delete, api_student_get_list } from "./commonApi";
-import { parser_student_get_list } from "./commonParser";
+import { api_student_add, api_student_get, api_student_get_list, api_student_update } from "./commonApi";
+import { parser_student_get, parser_student_get_list } from "./commonParser";
 
 const initialState = {
   snackbar: {
@@ -19,6 +19,7 @@ const initialState = {
   },
   student_data_count: 0,
   unique_student_data: {},
+  add_loading: false,
 };
 
 export const studentGetList = createAsyncThunk(
@@ -28,6 +29,43 @@ export const studentGetList = createAsyncThunk(
       const { params } = payload;
       const response = await api_student_get_list(params);
       const data = parser_student_get_list(response);
+      return data;
+    } catch (error) {
+      throw new Error(error);
+    }
+  }
+);
+
+export const studentAdd = createAsyncThunk(
+  "studentAdd",
+  async (payload) => {
+    try {
+      const response = await api_student_add(payload);
+      return response;
+    } catch (error) {
+      throw new Error(error);
+    }
+  }
+);
+
+export const studentUpdate = createAsyncThunk(
+  "studentUpdate",
+  async (payload) => {
+    try {
+      const response = await api_student_update(payload);
+      return response;
+    } catch (error) {
+      throw new Error(error);
+    }
+  }
+);
+
+export const getUniqueStudent = createAsyncThunk(
+  "getUniqueStudent",
+  async (payload) => {
+    try {
+      const response = await api_student_get(payload);
+      const data = parser_student_get(response);
       return data;
     } catch (error) {
       throw new Error(error);
@@ -48,6 +86,9 @@ export const common = createSlice({
         ...state.student_meta,
         ...meta,
       }
+    },
+    setUniqueStudentData: (state, action) => {
+      state.unique_student_data = action.payload;
     }
   },
   extraReducers: {
@@ -63,6 +104,28 @@ export const common = createSlice({
     [studentGetList.rejected]: (state, action) => {
       state.student_data_loading = false;
     },
+    // Add student
+    [studentAdd.pending]: (state, action) => {
+      state.add_loading = true;
+    },
+    [studentAdd.fulfilled]: (state, action) => {
+      state.add_loading = false;
+    },
+    [studentAdd.rejected]: (state, action) => {
+      state.add_loading = false;
+    },
+    // Get student
+    [getUniqueStudent.pending]: (state, action) => {
+      state.student_data_loading = true;
+    },
+    [getUniqueStudent.fulfilled]: (state, action) => {
+      state.student_data_loading = false;
+      state.unique_student_data = action.payload
+    },
+    [getUniqueStudent.rejected]: (state, action) => {
+      state.student_data_loading = false;
+    },
+
   }
 });
 
@@ -70,6 +133,7 @@ export const common = createSlice({
 export const {
   setSnackBar,
   setStudentMeta,
+  setUniqueStudentData,
 } = common.actions;
 
 export default common.reducer;

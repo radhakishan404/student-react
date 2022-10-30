@@ -32,3 +32,29 @@ export const parser_student_get_list = (response) => {
         throw new Error(error);
     }
 };
+
+export const parser_student_get = (response) => {
+    try {
+        if (response?.data) {
+            response = response.data;
+        }
+        if (!response) {
+            return {};
+        }
+
+        return {
+            user_id: get(response, "_id", ""),
+            name: get(response, "name", ""),
+            email: get(response, "email", ""),
+            dob: get(response, "dob", ""),
+            address: get(response, "address", ""),
+            phone: get(response, "phone", ""),
+            state: get(response, "state", ""),
+            zip: get(response, "zip", ""),
+            gender: get(response, "gender", ""),
+        }
+
+    } catch (error) {
+        throw new Error(error);
+    }
+};

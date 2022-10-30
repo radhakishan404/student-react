@@ -29,19 +29,22 @@ class StudentContainer extends React.Component {
     }
   }
 
+  handleEdit(id) {
+    this.props.navigate("/add-student/" + id);
+  }
+
   render() {
     const {
       student_data_loading,
       student_data,
       student_meta,
       student_data_count,
-      setSnackBar,
       setStudentMeta,
       navigate,
     } = this.props;
 
     return (
-      <Container maxWidth="lg" sx={{paddingTop: 5}}>
+      <Container maxWidth="lg" sx={{ paddingTop: 5 }}>
         <Grid container spacing={2}>
           <Grid
             item
@@ -52,7 +55,9 @@ class StudentContainer extends React.Component {
             alignItems="center"
           >
             <Typography variant="h6">Student List</Typography>
-            <Button variant="outlined" onClick={() => navigate("/add-student")}>Add Student</Button>
+            <Button variant="outlined" onClick={() => navigate("/add-student")}>
+              Add Student
+            </Button>
           </Grid>
           <Grid item xs={12}>
             <StudentTable
@@ -62,6 +67,7 @@ class StudentContainer extends React.Component {
               student_data_count={student_data_count}
               setStudentMeta={(d) => setStudentMeta(d)}
               getStudentData={() => this.getStudentData()}
+              edit={(id) => this.handleEdit(id)}
             />
           </Grid>
         </Grid>

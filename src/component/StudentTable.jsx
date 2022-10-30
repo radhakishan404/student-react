@@ -23,6 +23,7 @@ export default function StudentTable({
   student_data_loading,
   student_data_count,
   getStudentData,
+  edit,
 }) {
   const dispatch = useDispatch();
   const handlePerPageChange = (val) => {
@@ -38,7 +39,7 @@ export default function StudentTable({
     if (res.success) {
       dispatch(
         setSnackBar({
-          open: false,
+          open: true,
           message: res.message,
           severity: "info",
         })
@@ -74,7 +75,11 @@ export default function StudentTable({
                   {format(parseISO(val.createdAt), "dd-MM-yyyy")}
                 </TableCell>
                 <TableCell sx={{ textAlign: "center" }}>
-                  <Button variant="contained" color="success">
+                  <Button
+                    variant="contained"
+                    color="success"
+                    onClick={() => edit(val.user_id)}
+                  >
                     Edit
                   </Button>
                   <Button
@@ -92,7 +97,7 @@ export default function StudentTable({
       </Table>
       <TablePagination
         component="div"
-        onPageChange={(e) => handlePageChange(e.target.value)}
+        onPageChange={(e, val) => handlePageChange(val)}
         page={student_meta.page}
         count={student_data_count}
         rowsPerPage={student_meta.perPage}

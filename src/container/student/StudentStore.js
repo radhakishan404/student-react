@@ -1,6 +1,6 @@
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
-import { setSnackBar, setStudentMeta, studentGetList } from "../../store/common/commonSlice";
+import { setSnackBar, setStudentMeta, studentGetList, setUniqueStudentData } from "../../store/common/commonSlice";
 
 const mapStateToProps = (state) => {
     return {
@@ -15,7 +15,8 @@ const mapDispatchToProps = (dispatch) =>
     bindActionCreators({
         setSnackBar,
         setStudentMeta,
-        studentGetList
+        studentGetList,
+        setUniqueStudentData
     }, dispatch);
 
 const Store = (Container) =>
